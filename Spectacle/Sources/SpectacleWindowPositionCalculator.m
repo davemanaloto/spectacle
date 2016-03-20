@@ -135,24 +135,29 @@
 - (NSArray<SpectacleHistoryItem *> *)thirdsFromVisibleFrameOfScreen:(CGRect)visibleFrameOfScreen
 {
   NSMutableArray<SpectacleHistoryItem *> *result = [NSMutableArray new];
-  NSInteger i = 0;
 
-  for (i = 0; i < 3; i++) {
-    CGRect thirdOfScreen = visibleFrameOfScreen;
+  float WIDTH = 3;
+  float HEIGHT = 2;
 
-    thirdOfScreen.origin.x = visibleFrameOfScreen.origin.x + (floor(visibleFrameOfScreen.size.width / 3.0f) * i);
-    thirdOfScreen.size.width = floor(visibleFrameOfScreen.size.width / 3.0f);
+  NSInteger x = 0;
+  NSInteger y = 0;
 
-    [result addObject:[SpectacleHistoryItem historyItemFromAccessibilityElement:nil windowRect:thirdOfScreen]];
-  }
+  float sixthWidth = visibleFrameOfScreen.size.width / WIDTH;
+  float sixthHeight = visibleFrameOfScreen.size.height / HEIGHT;
 
-  for (i = 0; i < 3; i++) {
-    CGRect thirdOfScreen = visibleFrameOfScreen;
+  for (y = HEIGHT-1; y >= 0; y--) {
+      for (x = 0; x < WIDTH; ++x) {
 
-    thirdOfScreen.origin.y = visibleFrameOfScreen.origin.y + visibleFrameOfScreen.size.height - (floor(visibleFrameOfScreen.size.height / 3.0f) * (i + 1));
-    thirdOfScreen.size.height = floor(visibleFrameOfScreen.size.height / 3.0f);
+          CGRect sixthOfScreen = visibleFrameOfScreen;
 
-    [result addObject:[SpectacleHistoryItem historyItemFromAccessibilityElement:nil windowRect:thirdOfScreen]];
+          sixthOfScreen.origin.x = visibleFrameOfScreen.origin.x + (sixthWidth * x);
+          sixthOfScreen.origin.y = sixthOfScreen.origin.y + visibleFrameOfScreen.size.height - ((y+1) * sixthHeight);
+
+          sixthOfScreen.size.width = sixthWidth;
+          sixthOfScreen.size.height = sixthHeight;
+
+          [result addObject:[SpectacleHistoryItem historyItemFromAccessibilityElement:nil windowRect:sixthOfScreen]];
+      }
   }
 
   return result;
